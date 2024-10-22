@@ -8,7 +8,7 @@ export const TopSideButtons = () => {
   const openAddNewLeadModal = () => {
     dispatch(
       openModal({
-        title: "Add New Lead",
+        title: "Add New Product",
         bodyType: MODAL_BODY_TYPES.LEAD_ADD_NEW,
       })
     );

@@ -6,9 +6,12 @@ import { showNotification } from "../../common/headerSlice";
 import { addNewLead } from "../leadSlice";
 
 const INITIAL_LEAD_OBJ = {
-  first_name: "",
-  last_name: "",
-  email: "",
+  id: null,
+  name: "",
+  company: "",
+  totalQuantity: null, // Corrected the typo here
+  availableQuantity: null,
+  expireDate: "25/07/2026",
 };
 
 function AddLeadModalBody({ closeModal }) {
@@ -18,17 +21,20 @@ function AddLeadModalBody({ closeModal }) {
   const [leadObj, setLeadObj] = useState(INITIAL_LEAD_OBJ);
 
   const saveNewLead = () => {
-    if (leadObj.first_name.trim() === "")
-      return setErrorMessage("First Name is required!");
-    else if (leadObj.email.trim() === "")
-      return setErrorMessage("Email id is required!");
+    if (leadObj.name.trim() === "")
+      // Corrected field from 'first_name' to 'name'
+      return setErrorMessage("Name is required!");
+    else if (leadObj.company.trim() === "")
+      // Added company check
+      return setErrorMessage("Company is required!");
     else {
       let newLeadObj = {
-        id: 7,
-        email: leadObj.email,
-        first_name: leadObj.first_name,
-        last_name: leadObj.last_name,
-        avatar: "https://reqres.in/img/faces/1-image.jpg",
+        id: Math.floor(Math.random() * 100),
+        name: leadObj.name,
+        company: leadObj.company,
+        totalQuantity: leadObj.totalQuantity, // Corrected the typo here
+        availableQuantity: leadObj.availableQuantity,
+        expireDate: leadObj.expireDate,
       };
       dispatch(addNewLead({ newLeadObj }));
       dispatch(showNotification({ message: "New Lead Added!", status: 1 }));
@@ -45,28 +51,37 @@ function AddLeadModalBody({ closeModal }) {
     <>
       <InputText
         type="text"
-        defaultValue={leadObj.first_name}
-        updateType="first_name"
+        defaultValue={leadObj.name}
+        updateType="name" // Corrected updateType
         containerStyle="mt-4"
-        labelTitle="First Name"
+        labelTitle="Name" // Changed label title to "Name"
         updateFormValue={updateFormValue}
       />
 
       <InputText
         type="text"
-        defaultValue={leadObj.last_name}
-        updateType="last_name"
+        defaultValue={leadObj.company}
+        updateType="company" // Corrected updateType
         containerStyle="mt-4"
-        labelTitle="Last Name"
+        labelTitle="Company" // Changed label title to "Company"
         updateFormValue={updateFormValue}
       />
 
       <InputText
-        type="email"
-        defaultValue={leadObj.email}
-        updateType="email"
+        type="number"
+        defaultValue={leadObj.totalQuantity}
+        updateType="totalQuantity" // Corrected updateType
         containerStyle="mt-4"
-        labelTitle="Email Id"
+        labelTitle="Total Quantity" // Updated label title
+        updateFormValue={updateFormValue}
+      />
+
+      <InputText
+        type="number"
+        defaultValue={leadObj.availableQuantity}
+        updateType="availableQuantity" // Corrected updateType
+        containerStyle="mt-4"
+        labelTitle="Available Quantity" // Updated label title
         updateFormValue={updateFormValue}
       />
 

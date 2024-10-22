@@ -22,14 +22,14 @@ import {
   CONFIRMATION_MODAL_CLOSE_TYPES,
   MODAL_BODY_TYPES,
 } from "../../utils/globalConstantUtil";
-import { TrashIcon } from "@heroicons/react/24/outline";
+import { PencilSquareIcon, TrashIcon } from "@heroicons/react/24/outline";
 import moment from "moment";
 
 const statsData = [
   {
-    title: "New Users",
-    value: "34.7k",
-    icon: <UserGroupIcon className="w-8 h-8" />,
+    title: "Total Items",
+    value: "3452",
+    icon: <CircleStackIcon className="w-8 h-8" />,
     description: "↗︎ 2300 (22%)",
   },
   {
@@ -71,17 +71,6 @@ function Dashboard() {
     dispatch(getLeadsContent());
   }, []);
 
-  const getDummyStatus = (index) => {
-    if (index % 5 === 0) return <div className="badge">Not Interested</div>;
-    else if (index % 5 === 1)
-      return <div className="badge badge-primary">In Progress</div>;
-    else if (index % 5 === 2)
-      return <div className="badge badge-secondary">Sold</div>;
-    else if (index % 5 === 3)
-      return <div className="badge badge-accent">Need Followup</div>;
-    else return <div className="badge badge-ghost">Open</div>;
-  };
-
   const deleteCurrentLead = (index) => {
     dispatch(
       openModal({
@@ -95,6 +84,19 @@ function Dashboard() {
       })
     );
   };
+
+  const Dummy_Data = [
+    {
+      id: 1,
+      name: "Paracetamol",
+      company: "Cipla",
+      totalQuantity: 200,
+      availableQuantity: 81,
+      expireDate: "25/07/2026",
+    },
+  ];
+
+  const [productList, setProductList] = useState(Dummy_Data);
 
   return (
     <>
@@ -118,52 +120,39 @@ function Dashboard() {
             <table className="table w-full">
               <thead>
                 <tr>
+                  <th>Item No.</th>
                   <th>Product</th>
-                  <th>Item Id</th>
-                  <th>Created At</th>
-                  <th>Status</th>
-                  <th>Assigned To</th>
+                  <th>Company</th>
+                  <th>Quantity</th>
+                  <th>Expire Date</th>
                   <th>Action</th>
                 </tr>
               </thead>
               <tbody>
-                {leads.map((l, k) => {
-                  return (
-                    <tr key={k}>
-                      <td>
-                        <div className="flex items-center space-x-3">
-                          {/* <div className="avatar">
-                            <div className="mask mask-squircle w-12 h-12">
-                              <img src={l.avatar} alt="Avatar" />
-                            </div>
-                          </div> */}
-                          <div>
-                            <div className="font-bold">{l.first_name}</div>
-                            <div className="text-sm opacity-50">
-                              {l.last_name}
-                            </div>
-                          </div>
-                        </div>
-                      </td>
-                      <td>{l.email}</td>
-                      <td>
-                        {moment(new Date())
-                          .add(-5 * (k + 2), "days")
-                          .format("DD MMM YY")}
-                      </td>
-                      <td>{getDummyStatus(k)}</td>
-                      <td>{l.last_name}</td>
-                      <td>
-                        <button
-                          className="btn btn-square btn-ghost"
-                          onClick={() => deleteCurrentLead(k)}
-                        >
-                          <TrashIcon className="w-5" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {(leads.length > 0 &&
+                  leads?.map((list, index) => {
+                    return (
+                      <tr key={list.id}>
+                        <td>{index + 1}</td>
+                        <td className="font-bold"> {list.name}</td>
+                        <td>{list.company}</td>
+                        <td>{`${list.availableQuantity}/${list.totalQuantity}`}</td>
+                        <td>{list.expireDate}</td>
+
+                        <td className="flex gap-3">
+                          <button className="hover:text-blue-500">
+                            <PencilSquareIcon className="w-5" />
+                          </button>
+                          <button
+                            className="hover:text-red-500"
+                            onClick={() => deleteCurrentLead(list.id)}
+                          >
+                            <TrashIcon className="w-5" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })) || <p>No Data</p>}
               </tbody>
             </table>
           </div>
